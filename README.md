@@ -3,9 +3,9 @@
 - Skipped unit support for temperature as it is not requested
 - No specific business requirements were given in the case of adding forecast for the same day. It is set to overwrite that day.
 - Skipped making human friendly temperature descriptions configurable as it is not requested
-- Temperatures are stored and treated as integers as point precision is not requested
+- Temperatures are stored and treated as integers as floating point precision is not requested
 - No rules are specified about what to do in case of missing forecasts in the upcoming week. 
-  Assumed the next 7 available forecasts from today are returned regardless of their dates.
+  Assumed the next 7 available forecasts from today are to be returned regardless of their dates.
 
 # Technical Notes
 

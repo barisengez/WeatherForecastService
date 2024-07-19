@@ -1,10 +1,11 @@
 ﻿using Core.Entities;
 using Core.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace DataAccess.SQL.Repositories;
 
-public class WeatherForecastRepository(WeatherForecastDbContext context) : IWeatherForecastRepository
+public class WeatherForecastRepository(WeatherForecastDbContext context, ILogger<WeatherForecastRepository> logger) : IWeatherForecastRepository
 {
     private const int MaxWeatherForecastCountToReturn = 1000;
 
@@ -15,6 +16,8 @@ public class WeatherForecastRepository(WeatherForecastDbContext context) : IWeat
         {
             existingRecord.Temperature = forecast.Temperature;
             context.WeatherForecasts.Update(existingRecord);
+
+            logger.LogInformation($"Forecast for date {forecast.Date} already exists and updated");
         }
         else
         {
