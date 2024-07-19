@@ -1,0 +1,15 @@
+# Business Notes
+
+- Skipped unit support for temperature as it is not requested
+- No specific business requirements were given in the case of adding forecast for the same day. It is set to overwrite that day.
+- Skipped making human friendly temperature descriptions configurable as it is not requested
+- Temperatures are stored and treated as integers as point precision is not requested
+
+# Technical Notes
+
+- Skipped Authorization/Authentication as it is not requested
+- Skipped integration tests as it is not requested
+- Skipped using MediatR to keep it simple, as CQRS pattern is not requested 
+
+- Applied db migrations in docker-compose for easy demonstration purposes. 
+  Normally it should be run seperately from the app run to prevent concurrent runs in case of starting multiple instances of the app at the same time

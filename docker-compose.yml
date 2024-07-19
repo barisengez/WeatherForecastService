@@ -1,0 +1,45 @@
+version: '3.4'
+
+services:
+    
+  db:
+    image: mcr.microsoft.com/mssql/server:latest
+    restart: always
+    ports:
+      - 1434:1433
+    environment:
+      SA_PASSWORD: VeryStrong-Password-Here-1
+      ACCEPT_EULA: "Y"
+    volumes:
+      - mssql-data:/var/opt/mssql
+    networks:
+      - local
+
+  migration:
+    build:
+      context: .
+      dockerfile: Migrations/Scripts/Dockerfile
+    depends_on:
+      - db
+    environment:
+      - ConnectionStrings__OverrideServerWith=db
+    networks:
+      - local
+      
+  api:
+    build:
+      context: API
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+      - migration
+    networks:
+      - local
+      
+volumes:
+    mssql-data:
+        driver: local
+
+networks:
+  local:
+    driver: bridge  
