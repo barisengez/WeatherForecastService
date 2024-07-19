@@ -45,6 +45,7 @@ public class WeatherForecastController(
     {
         var forecasts = await appService.GetWeeklyWeatherForecastAsync();
         if (forecasts.Count == 0) return NotFound();
+
         return Ok(forecasts);
     }
 }
