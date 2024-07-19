@@ -2,13 +2,12 @@
 using Business.Dtos;
 using Core.Entities;
 
-namespace Business.Mappings
+namespace Business.Mappings;
+
+public class AddWeatherForecastMappingProfile : Profile
 {
-    public class AddWeatherForecastMappingProfile : Profile
+    public AddWeatherForecastMappingProfile()
     {
-        public AddWeatherForecastMappingProfile()
-        {
-            CreateMap<AddWeatherForecastDto,WeatherForecast>();
-        }
+        CreateMap<AddWeatherForecastDto, WeatherForecast>();
     }
 }

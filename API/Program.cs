@@ -23,7 +23,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
-builder.Services.AddWeatherForecastDataAccess(builder.Configuration);
+builder.Services.AddWeatherForecastDataAccess();
 builder.Services.AddWeatherForecastBusiness();
 
 var app = builder.Build();

@@ -1,10 +1,9 @@
 ﻿using Core.Entities;
 
-namespace Core.Services
+namespace Core.Services;
+
+public interface IWeatherForecastService
 {
-    public interface IWeatherForecastService
-    {
-        public Task AddWeatherForecastAsync(WeatherForecast forecast);
-        public Task<List<WeatherForecast>> GetWeatherForecastAsync(DateOnly fromDate, int maxCount);
-    }
+    public Task AddWeatherForecastAsync(WeatherForecast forecast);
+    public Task<List<WeatherForecast>> GetWeatherForecastAsync(DateOnly fromDate, int maxCount);
 }

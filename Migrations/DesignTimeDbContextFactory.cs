@@ -1,17 +1,14 @@
 ﻿using DataAccess.SQL;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
 
-namespace Migrations
+namespace Migrations;
+
+public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<WeatherForecastDbContext>
 {
-    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<WeatherForecastDbContext>
+    public WeatherForecastDbContext CreateDbContext(string[] args)
     {
-        public WeatherForecastDbContext CreateDbContext(string[] args)
-        {
-            var builder = DbContextHelper.GetDefaultDbContextOptionsBuilder();
+        var builder = DbContextHelper.GetDbContextOptionsBuilder();
 
-            return new WeatherForecastDbContext(builder.Options);
-        }
+        return new WeatherForecastDbContext(builder.Options);
     }
 }

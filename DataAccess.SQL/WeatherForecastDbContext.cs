@@ -2,17 +2,16 @@
 using DataAccess.SQL.Configurations;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataAccess.SQL
+namespace DataAccess.SQL;
+
+public class WeatherForecastDbContext(DbContextOptions<WeatherForecastDbContext> options) : DbContext(options)
 {
-    public class WeatherForecastDbContext(DbContextOptions<WeatherForecastDbContext> options) : DbContext(options)
+    public DbSet<WeatherForecast> WeatherForecasts { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        public DbSet<WeatherForecast> WeatherForecasts { get; set; }
+        base.OnModelCreating(modelBuilder);
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.ApplyConfiguration(new WeatherForecastConfiguration());
-        }
+        modelBuilder.ApplyConfiguration(new WeatherForecastConfiguration());
     }
 }

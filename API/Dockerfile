@@ -6,17 +6,22 @@ EXPOSE 8080
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["WeatherForecastService.csproj", "."]
-RUN dotnet restore "./WeatherForecastService.csproj"
+
+# Copy projects
+COPY ./*/*.csproj ./
+# Put project files back into their own project directories
+RUN for file in $(ls *.csproj); do mkdir -p ${file%.*}/ && mv $file ${file%.*}/; done
+
+RUN dotnet restore "API/API.csproj"
 COPY . .
-WORKDIR "/src/."
-RUN dotnet build "./WeatherForecastService.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "API"
+RUN dotnet build "API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./WeatherForecastService.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "WeatherForecastService.dll"]
+ENTRYPOINT ["dotnet", "API.dll"]

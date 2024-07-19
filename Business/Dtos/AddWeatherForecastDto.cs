@@ -1,8 +1,7 @@
-﻿namespace Business.Dtos
+﻿namespace Business.Dtos;
+
+public class AddWeatherForecastDto
 {
-    public class AddWeatherForecastDto
-    {
-        public DateOnly Date { get; set; }
-        public int Temperature { get; set; }
-    }
+    public DateOnly Date { get; set; }
+    public int Temperature { get; set; }
 }

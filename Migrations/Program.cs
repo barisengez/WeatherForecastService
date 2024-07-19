@@ -1,17 +1,16 @@
 ﻿using DataAccess.SQL;
 using Microsoft.EntityFrameworkCore;
 
-namespace Migrations
+namespace Migrations;
+
+public static class Program
 {
-    public static class Program
+    public static void Main()
     {
-        public static void Main()
-        {
-            var builder = DbContextHelper.GetDefaultDbContextOptionsBuilder();
+        var builder = DbContextHelper.GetDbContextOptionsBuilder();
 
-            using var context = new WeatherForecastDbContext(builder.Options);
+        using var context = new WeatherForecastDbContext(builder.Options);
 
-            context.Database.Migrate();
-        }
+        context.Database.Migrate();
     }
 }

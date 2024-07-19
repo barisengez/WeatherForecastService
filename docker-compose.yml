@@ -28,11 +28,15 @@ services:
       
   api:
     build:
-      context: API
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: API/Dockerfile
     depends_on:
       - db
       - migration
+    environment:
+      - ConnectionStrings__OverrideServerWith=db
+    ports:
+      - "28144:8080"
     networks:
       - local
       

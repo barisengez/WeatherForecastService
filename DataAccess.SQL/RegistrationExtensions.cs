@@ -1,22 +1,21 @@
 ﻿using Core.Repositories;
 using DataAccess.SQL.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DataAccess.SQL
+namespace DataAccess.SQL;
+
+public static class RegistrationExtensions
 {
-    public static class RegistrationExtensions
+    public static IServiceCollection AddWeatherForecastDataAccess(this IServiceCollection services)
     {
-        public static IServiceCollection AddWeatherForecastDataAccess(
-            this IServiceCollection services, IConfigurationManager configurationManager)
-        {
-            services.AddDbContext<WeatherForecastDbContext>(options =>
-                options.UseSqlServer(configurationManager.GetConnectionString("DefaultConnection")));
+        var connectionString = DbContextHelper.GetDefaultConnectionString();
 
-            services.AddScoped<IWeatherForecastRepository, WeatherForecastRepository>();
+        services.AddDbContext<WeatherForecastDbContext>(options =>
+            options.UseSqlServer(connectionString));
 
-            return services;
-        }
+        services.AddScoped<IWeatherForecastRepository, WeatherForecastRepository>();
+
+        return services;
     }
 }
