@@ -3,6 +3,8 @@ using AutoFixture.AutoMoq;
 using Core.Entities;
 using DataAccess.SQL.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Moq;
 using UnitTests.Helpers;
 
 namespace UnitTests.DataAccess;
@@ -18,7 +20,8 @@ public class WeatherForecastRepositoryTests(WeatherForecastDbContextFixture cont
     {
         // Arrange
         contextFixture.ClearDatabase();
-        var repository = new WeatherForecastRepository(contextFixture.Context);
+        var loggerMock = new Mock<ILogger<WeatherForecastRepository>>();
+        var repository = new WeatherForecastRepository(contextFixture.Context, loggerMock.Object);
         var forecastToSave = _fixture.Create<WeatherForecast>();
 
         // Act
@@ -36,7 +39,8 @@ public class WeatherForecastRepositoryTests(WeatherForecastDbContextFixture cont
     {
         // Arrange
         contextFixture.ClearDatabase();
-        var repository = new WeatherForecastRepository(contextFixture.Context);
+        var loggerMock = new Mock<ILogger<WeatherForecastRepository>>();
+        var repository = new WeatherForecastRepository(contextFixture.Context, loggerMock.Object);
         var existingForecast = _fixture.Create<WeatherForecast>();
         var updatedForecast = _fixture.Create<WeatherForecast>();
         await contextFixture.Context.WeatherForecasts.AddAsync(existingForecast);
@@ -58,7 +62,8 @@ public class WeatherForecastRepositoryTests(WeatherForecastDbContextFixture cont
     {
         // Arrange
         contextFixture.ClearDatabase();
-        var repository = new WeatherForecastRepository(contextFixture.Context);
+        var loggerMock = new Mock<ILogger<WeatherForecastRepository>>();
+        var repository = new WeatherForecastRepository(contextFixture.Context, loggerMock.Object);
 
         await contextFixture.Context.WeatherForecasts.AddRangeAsync(
             new WeatherForecast { Date = new DateOnly(2024, 1, 1), Temperature = 10 },
@@ -82,7 +87,8 @@ public class WeatherForecastRepositoryTests(WeatherForecastDbContextFixture cont
     {
         // Arrange
         contextFixture.ClearDatabase();
-        var repository = new WeatherForecastRepository(contextFixture.Context);
+        var loggerMock = new Mock<ILogger<WeatherForecastRepository>>();
+        var repository = new WeatherForecastRepository(contextFixture.Context, loggerMock.Object);
 
         await contextFixture.Context.WeatherForecasts.AddRangeAsync(
             new WeatherForecast { Date = new DateOnly(2024, 1, 1), Temperature = 10 },
