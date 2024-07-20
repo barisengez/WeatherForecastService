@@ -23,16 +23,25 @@ public class WeatherForecastControllerTests
         var mockValidator = new Mock<IValidator<AddWeatherForecastDto>>();
         var mockService = new Mock<IWeatherForecastApplicationService>();
         var controller = new WeatherForecastController(mockService.Object, mockValidator.Object);
-        var validDto = _fixture.Create<AddWeatherForecastDto>();
-        mockValidator.Setup(v => v.ValidateAsync(validDto, It.IsAny<CancellationToken>()))
+        var validDtoToAdd = _fixture.Create<AddWeatherForecastDto>();
+        var addedDto = _fixture.Build<WeatherForecastDto>()
+            .With(p => p.Date, validDtoToAdd.Date)
+            .With(p => p.Temperature, validDtoToAdd.Temperature)
+            .Create();
+        mockValidator.Setup(v => v.ValidateAsync(validDtoToAdd, It.IsAny<CancellationToken>()))
             .ReturnsAsync(new ValidationResult()).Verifiable();
-        mockService.Setup(p => p.AddWeatherForecastAsync(validDto)).Returns(Task.CompletedTask).Verifiable();
+        mockService.Setup(p => p.AddWeatherForecastAsync(validDtoToAdd))
+            .ReturnsAsync(addedDto)
+            .Verifiable();
 
         // Act
-        var result = await controller.AddWeatherForecast(validDto);
+        var result = await controller.AddWeatherForecastAsync(validDtoToAdd);
 
         // Assert
-        Assert.IsType<CreatedResult>(result);
+        var createdResult = Assert.IsType<CreatedResult>(result);
+        var returnValue = Assert.IsType<WeatherForecastDto>(createdResult.Value);
+        Assert.Equal(validDtoToAdd.Date, returnValue.Date);
+        Assert.Equal(validDtoToAdd.Temperature, returnValue.Temperature);
         mockValidator.Verify();
         mockService.Verify();
     }
@@ -50,7 +59,7 @@ public class WeatherForecastControllerTests
             .ReturnsAsync(new ValidationResult(validationFailures));
 
         // Act
-        var result = await controller.AddWeatherForecast(invalidDto);
+        var result = await controller.AddWeatherForecastAsync(invalidDto);
 
         // Assert
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
@@ -69,7 +78,7 @@ public class WeatherForecastControllerTests
         var controller = new WeatherForecastController(mockService.Object, mockValidator.Object);
 
         // Act
-        var result = await controller.GetWeeklyWeatherForecast();
+        var result = await controller.GetWeeklyWeatherForecastAsync();
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -88,7 +97,7 @@ public class WeatherForecastControllerTests
         var controller = new WeatherForecastController(mockService.Object, mockValidator.Object);
 
         // Act
-        var result = await controller.GetWeeklyWeatherForecast();
+        var result = await controller.GetWeeklyWeatherForecastAsync();
 
         // Assert
         Assert.IsType<NotFoundResult>(result);

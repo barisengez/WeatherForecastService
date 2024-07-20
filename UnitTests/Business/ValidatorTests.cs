@@ -6,7 +6,7 @@ namespace UnitTests.Business;
 
 public class ValidatorTests
 {
-    readonly AddWeatherForecastDtoValidator _validator = new();
+    private readonly AddWeatherForecastDtoValidator _validator = new();
 
     [Theory]
     [InlineData(int.MinValue)]

@@ -25,13 +25,15 @@ public class WeatherForecastRepositoryTests(WeatherForecastDbContextFixture cont
         var forecastToSave = _fixture.Create<WeatherForecast>();
 
         // Act
-        await repository.SaveOrUpdateAsync(forecastToSave);
+        var returnedForecast = await repository.AddOrUpdateAsync(forecastToSave);
 
         // Assert
-        var savedForecast = await contextFixture.Context.WeatherForecasts.FirstOrDefaultAsync(f => f.Date == forecastToSave.Date);
-        Assert.NotNull(savedForecast);
-        Assert.Equal(forecastToSave.Temperature, savedForecast.Temperature);
-        Assert.Equal(forecastToSave.Date, savedForecast.Date);
+        var addedForecast = await contextFixture.Context.WeatherForecasts.FirstOrDefaultAsync(f => f.Date == forecastToSave.Date);
+        Assert.NotNull(addedForecast);
+        Assert.Equal(forecastToSave.Temperature, addedForecast.Temperature);
+        Assert.Equal(forecastToSave.Date, addedForecast.Date);
+        Assert.Equal(forecastToSave.Temperature, returnedForecast.Temperature);
+        Assert.Equal(forecastToSave.Date, returnedForecast.Date);
     }
 
     [Fact]
@@ -42,19 +44,21 @@ public class WeatherForecastRepositoryTests(WeatherForecastDbContextFixture cont
         var loggerMock = new Mock<ILogger<WeatherForecastRepository>>();
         var repository = new WeatherForecastRepository(contextFixture.Context, loggerMock.Object);
         var existingForecast = _fixture.Create<WeatherForecast>();
-        var updatedForecast = _fixture.Create<WeatherForecast>();
+        var forecastToUpdate = _fixture.Create<WeatherForecast>();
         await contextFixture.Context.WeatherForecasts.AddAsync(existingForecast);
         await contextFixture.Context.SaveChangesAsync();
 
         // Act
-        await repository.SaveOrUpdateAsync(updatedForecast);
+        var returnedForecast = await repository.AddOrUpdateAsync(forecastToUpdate);
 
         // Assert
         var updatedRecord = await contextFixture.Context.WeatherForecasts
-            .FirstOrDefaultAsync(f => f.Date == updatedForecast.Date);
+            .FirstOrDefaultAsync(f => f.Date == forecastToUpdate.Date);
         Assert.NotNull(updatedRecord);
-        Assert.Equal(updatedForecast.Temperature, updatedRecord.Temperature);
-        Assert.Equal(updatedForecast.Date, updatedRecord.Date);
+        Assert.Equal(forecastToUpdate.Temperature, updatedRecord.Temperature);
+        Assert.Equal(forecastToUpdate.Date, updatedRecord.Date);
+        Assert.Equal(forecastToUpdate.Temperature, returnedForecast.Temperature);
+        Assert.Equal(forecastToUpdate.Date, returnedForecast.Date);
     }
 
     [Fact]

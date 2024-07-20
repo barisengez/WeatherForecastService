@@ -4,6 +4,6 @@ namespace Business.Services;
 
 public interface IWeatherForecastApplicationService
 {
-    public Task AddWeatherForecastAsync(AddWeatherForecastDto dto);
+    public Task<WeatherForecastDto> AddWeatherForecastAsync(AddWeatherForecastDto dto);
     public Task<List<WeatherForecastDto>> GetWeeklyWeatherForecastAsync();
 }

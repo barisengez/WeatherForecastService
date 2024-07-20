@@ -17,3 +17,5 @@
 
 - Applied db migrations in docker-compose for easy demonstration purposes. 
   Normally it should be run seperately from the app run to prevent concurrent runs in case of starting multiple instances of the app at the same time
+
+- App swagger url after docker-compose : http://localhost:28144/swagger/index.html

@@ -1,9 +1,9 @@
+using System.Net;
 using Business.Dtos;
 using Business.Services;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace API.Controllers;
 
@@ -18,19 +18,19 @@ public class WeatherForecastController(
     /// </summary>
     /// <param name="dto">The weather forecast dto</param>
     /// <returns>Result of the operation.</returns>
-    /// <response code="200">If the weather forecast is added successfully.</response>
+    /// <response code="201">If the weather forecast is added successfully.</response>
     /// <response code="400">If the weather forecast data is invalid.</response>
     [HttpPost]
-    [ProducesResponseType((int)HttpStatusCode.Created)]
+    [ProducesResponseType(typeof(WeatherForecastDto), (int)HttpStatusCode.Created)]
     [ProducesResponseType(typeof(List<ValidationFailure>), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> AddWeatherForecast(AddWeatherForecastDto dto)
+    public async Task<IActionResult> AddWeatherForecastAsync(AddWeatherForecastDto dto)
     {
         var validationResult = await addWeatherForecastDtoValidator.ValidateAsync(dto);
         if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
 
-        await appService.AddWeatherForecastAsync(dto);
+        var addedDto = await appService.AddWeatherForecastAsync(dto);
 
-        return Created();
+        return Created(string.Empty, addedDto);
     }
 
     /// <summary>
@@ -42,7 +42,7 @@ public class WeatherForecastController(
     [HttpGet("weekly-forecast")]
     [ProducesResponseType(typeof(WeatherForecastDto), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
-    public async Task<IActionResult> GetWeeklyWeatherForecast()
+    public async Task<IActionResult> GetWeeklyWeatherForecastAsync()
     {
         var forecasts = await appService.GetWeeklyWeatherForecastAsync();
         if (forecasts.Count == 0) return NotFound();

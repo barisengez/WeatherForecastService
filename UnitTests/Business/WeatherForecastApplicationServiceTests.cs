@@ -32,16 +32,23 @@ public class WeatherForecastApplicationServiceTests
         // Arrange
         var weatherForecastServiceMock = new Mock<IWeatherForecastService>();
         var service = new WeatherForecastApplicationService(weatherForecastServiceMock.Object, _fixture.Create<IMapper>());
-        var dto = _fixture.Create<AddWeatherForecastDto>();
+        var dtoToAdd = _fixture.Create<AddWeatherForecastDto>();
+        var addedEntity = _fixture.Build<WeatherForecast>()
+            .With(p => p.Date, dtoToAdd.Date)
+            .With(p => p.Temperature, dtoToAdd.Temperature)
+            .Create();
 
         weatherForecastServiceMock.Setup(m => m.AddWeatherForecastAsync(
-                It.Is<WeatherForecast>(k => k.Date == dto.Date && k.Temperature == dto.Temperature)))
-            .Returns(Task.CompletedTask).Verifiable();
+                It.Is<WeatherForecast>(k => k.Date == dtoToAdd.Date && k.Temperature == dtoToAdd.Temperature)))
+            .ReturnsAsync(addedEntity)
+            .Verifiable();
 
         // Act
-        await service.AddWeatherForecastAsync(dto);
+        var result = await service.AddWeatherForecastAsync(dtoToAdd);
 
         // Assert
+        Assert.Equal(dtoToAdd.Date, result.Date);
+        Assert.Equal(dtoToAdd.Temperature, result.Temperature);
         weatherForecastServiceMock.Verify();
     }
 

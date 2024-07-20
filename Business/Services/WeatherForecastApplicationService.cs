@@ -10,10 +10,12 @@ public class WeatherForecastApplicationService(IWeatherForecastService weatherFo
 {
     private const int WeeklyDayCount = 7;
 
-    public async Task AddWeatherForecastAsync(AddWeatherForecastDto dto)
+    public async Task<WeatherForecastDto> AddWeatherForecastAsync(AddWeatherForecastDto dto)
     {
         var forecast = mapper.Map<WeatherForecast>(dto);
-        await weatherForecastService.AddWeatherForecastAsync(forecast);
+        var addedForecast = await weatherForecastService.AddWeatherForecastAsync(forecast);
+
+        return mapper.Map<WeatherForecastDto>(addedForecast);
     }
 
     public async Task<List<WeatherForecastDto>> GetWeeklyWeatherForecastAsync()

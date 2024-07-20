@@ -5,5 +5,5 @@ namespace Core.Repositories;
 public interface IWeatherForecastRepository
 {
     Task<List<WeatherForecast>> GetWeatherForecastsAsync(DateOnly fromDate, int maxCount);
-    Task SaveOrUpdateAsync(WeatherForecast forecast);
+    Task<WeatherForecast> AddOrUpdateAsync(WeatherForecast forecast);
 }

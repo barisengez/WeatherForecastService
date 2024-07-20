@@ -5,9 +5,9 @@ namespace Core.Services;
 
 public class WeatherForecastService(IWeatherForecastRepository repository) : IWeatherForecastService
 {
-    public async Task AddWeatherForecastAsync(WeatherForecast forecast)
+    public async Task<WeatherForecast> AddWeatherForecastAsync(WeatherForecast forecast)
     {
-        await repository.SaveOrUpdateAsync(forecast);
+        return await repository.AddOrUpdateAsync(forecast);
     }
 
     public async Task<List<WeatherForecast>> GetWeatherForecastAsync(DateOnly fromDate, int maxCount)

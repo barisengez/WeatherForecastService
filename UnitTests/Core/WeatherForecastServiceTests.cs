@@ -39,13 +39,21 @@ public class WeatherForecastServiceTests
         // Arrange
         var mockRepository = new Mock<IWeatherForecastRepository>();
         var forecastToSave = _fixture.Create<WeatherForecast>();
-        mockRepository.Setup(repo => repo.SaveOrUpdateAsync(forecastToSave)).Returns(Task.CompletedTask).Verifiable();
+        var addedEntity = _fixture.Build<WeatherForecast>()
+            .With(p => p.Date, forecastToSave.Date)
+            .With(p => p.Temperature, forecastToSave.Temperature)
+            .Create();
+        mockRepository.Setup(repo => repo.AddOrUpdateAsync(forecastToSave))
+            .ReturnsAsync(addedEntity)
+            .Verifiable();
         var service = new WeatherForecastService(mockRepository.Object);
 
         // Act
-        await service.AddWeatherForecastAsync(forecastToSave);
+        var result = await service.AddWeatherForecastAsync(forecastToSave);
 
         // Assert
+        Assert.Equal(forecastToSave.Date, result.Date);
+        Assert.Equal(forecastToSave.Temperature, result.Temperature);
         mockRepository.Verify();
     }
 }

@@ -9,22 +9,24 @@ public class WeatherForecastRepository(WeatherForecastDbContext context, ILogger
 {
     private const int MaxWeatherForecastCountToReturn = 1000;
 
-    public async Task SaveOrUpdateAsync(WeatherForecast forecast)
+    public async Task<WeatherForecast> AddOrUpdateAsync(WeatherForecast forecast)
     {
         var existingRecord = await context.WeatherForecasts.Where(p => p.Date == forecast.Date).FirstOrDefaultAsync();
+
         if (existingRecord != null)
         {
             existingRecord.Temperature = forecast.Temperature;
-            context.WeatherForecasts.Update(existingRecord);
-
-            logger.LogInformation($"Forecast for date {forecast.Date} already exists and updated");
+            logger.LogInformation($"Forecast for date {forecast.Date} already exists and being updated");
         }
         else
         {
-            await context.WeatherForecasts.AddAsync(forecast);
+            context.WeatherForecasts.Add(forecast);
+            logger.LogInformation($"Forecast for date {forecast.Date} does not exist and is being added");
         }
 
         await context.SaveChangesAsync();
+
+        return forecast;
     }
 
     public async Task<List<WeatherForecast>> GetWeatherForecastsAsync(DateOnly fromDate, int maxCount)
