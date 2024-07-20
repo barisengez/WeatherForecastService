@@ -32,7 +32,7 @@ public class WeatherForecastControllerTests
         var result = await controller.AddWeatherForecast(validDto);
 
         // Assert
-        Assert.IsType<OkResult>(result);
+        Assert.IsType<CreatedResult>(result);
         mockValidator.Verify();
         mockService.Verify();
     }

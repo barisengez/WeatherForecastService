@@ -17,10 +17,11 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6A706DAE-72CF-4645-A20E-63A57D95C6FF}"
 	ProjectSection(SolutionItems) = preProject
+		Assignment .NET.docx = Assignment .NET.docx
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{F0E789B2-85F7-4A4C-BF1F-1AAE9A3B103D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "UnitTests\UnitTests.csproj", "{F0E789B2-85F7-4A4C-BF1F-1AAE9A3B103D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
